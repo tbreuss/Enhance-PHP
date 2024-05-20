@@ -1,0 +1,20 @@
+name: Testing Enhance-PHP
+on: [push, pull_request]
+jobs:
+  test:
+    strategy:
+      matrix:
+        operating-system: [ubuntu-latest, windows-latest, macos-latest]
+        php-versions: ['5.6', '7.4', '8.0', '8.1', '8.2', '8.3']
+    runs-on: ${{ matrix.operating-system }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+
+      - name: Run Self-Test
+        run: cd Self-Test && php index.php

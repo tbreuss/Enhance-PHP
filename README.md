@@ -1,10 +1,12 @@
-Enhance PHP [![Build Status](https://secure.travis-ci.org/Enhance-PHP/Enhance-PHP.png)](http://travis-ci.org/Enhance-PHP/Enhance-PHP)
+# Enhance PHP 
+
+![GitHub Workflows](https://github.com/tbreuss/Enhance-PHP/actions/workflows/tests.yml/badge.svg)
 
 A unit testing framework with mocks and stubs. Built for PHP, in PHP!
 
-Quick Start: Just add EnhanceTestFramework.php and you are ready to go. 
+Quick Start: Just add `EnhanceTestFramework.php` and you are ready to go.
 
-[Check out the documentation](https://github.com/Enhance-PHP/Enhance-PHP/wiki) for more: 
+[Check out the documentation](https://github.com/Enhance-PHP/Enhance-PHP/wiki) for more.
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at http://www.apache.org/licenses/LICENSE-2.0
 
@@ -15,4 +17,3 @@ https://github.com/Enhance-PHP/Enhance-PHP
 Note - this project is still active. I know you check the revision dates, but we 
 have kept Enhance lightweight and stable, which means we don't need to keep
 updating it all the time :)
-
