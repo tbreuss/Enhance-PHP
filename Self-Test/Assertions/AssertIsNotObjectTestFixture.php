@@ -4,7 +4,7 @@ class AssertIsNotObjectTestFixture extends \Enhance\TestFixture
     /** @var \Enhance\Assertions $target */
     private $target;
     
-    public function setUp() 
+    public function setUp()
     {
         $this->target = \Enhance\Core::getCodeCoverageWrapper('\Enhance\Assertions', array(\Enhance\Language::English));
     }
@@ -26,4 +26,3 @@ class AssertIsNotObjectTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

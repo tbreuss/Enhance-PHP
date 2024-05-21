@@ -17,9 +17,8 @@ class ExampleAnotherClass
         return $a . $b . $this->X;
     }
     
-    public function thisMethodIsNotCovered($x) 
+    public function thisMethodIsNotCovered($x)
     {
         return $x;
     }
 }
-?>

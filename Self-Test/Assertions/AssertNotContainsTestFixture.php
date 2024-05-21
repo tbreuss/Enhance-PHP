@@ -9,7 +9,7 @@ class AssertNotContainsTestFixture extends \Enhance\TestFixture
         $this->target = \Enhance\Core::getCodeCoverageWrapper('\Enhance\Assertions', array(\Enhance\Language::English));
     }
     
-    public function assertNotContainsWithStringThatContains() 
+    public function assertNotContainsWithStringThatContains()
     {
         $verifyFailed = false;
         try {
@@ -47,4 +47,3 @@ class AssertNotContainsTestFixture extends \Enhance\TestFixture
         $this->target->notContains('Test', 'Some Other String');
     }
 }
-?>

@@ -4,7 +4,7 @@ namespace TestDriven;
 // Example built using TDD
 include_once('../EnhanceTestFramework.php');
 
-class ExampleClass 
+class ExampleClass
 {
     public function addTwoNumbers($a, $b)
     {
@@ -38,5 +38,3 @@ class ExampleTestFixture extends \Enhance\TestFixture
 }
 
 \Enhance\Core::runTests();
-?>
-

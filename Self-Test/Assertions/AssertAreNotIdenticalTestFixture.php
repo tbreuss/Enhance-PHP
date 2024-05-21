@@ -1,6 +1,6 @@
 <?php
 class AssertAreNotIdenticalTestFixture extends \Enhance\TestFixture
- {
+{
     /** @var \Enhance\Assertions $target */
     private $target;
     
@@ -57,4 +57,3 @@ class AssertAreNotIdenticalTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

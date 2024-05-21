@@ -14,7 +14,7 @@ class AssertContainsTestFixture extends \Enhance\TestFixture
         $this->target->contains('Test', 'Some Test String');
     }
     
-    public function assertContainsWithStringThatEndsWith() 
+    public function assertContainsWithStringThatEndsWith()
     {
         $this->target->contains('Test', 'Some Test');
     }
@@ -35,4 +35,3 @@ class AssertContainsTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

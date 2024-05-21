@@ -1,6 +1,6 @@
 <?php
 class AssertInconclusiveTestFixture extends \Enhance\TestFixture
- {
+{
     /** @var \Enhance\Assertions $target */
     private $target;
     
@@ -20,4 +20,3 @@ class AssertInconclusiveTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

@@ -31,7 +31,7 @@ class CodeCoverageLoggerTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::areIdentical(1, $result);
     }
     
-    public function useCodeCoverageLoggerToSetProperty() 
+    public function useCodeCoverageLoggerToSetProperty()
     {
         /** @var TestClassForCodeCoverageLogger $target */
         $target = \Enhance\Core::getCodeCoverageWrapper('TestClassForCodeCoverageLogger');
@@ -42,4 +42,3 @@ class CodeCoverageLoggerTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::areIdentical(8, $result);
     }
 }
-?>

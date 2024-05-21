@@ -13,7 +13,8 @@ class MockTestFixture extends \Enhance\TestFixture
         $mock->verifyExpectations();
     }
     
-    public function createMockWithFluentChainOfReturnValuesExpectCorrectReturnValues() {
+    public function createMockWithFluentChainOfReturnValuesExpectCorrectReturnValues()
+    {
         /** @var IMockExample $mock */
         $mock = \Enhance\MockFactory::createMock('ExampleClass');
         $mock->addExpectation(\Enhance\Expect::method('doSomething')->with('hello', 3, 'world')->returns('Some Value')->returns('Second Value')->returns('Third Value')->times(3));
@@ -80,8 +81,7 @@ class MockTestFixture extends \Enhance\TestFixture
         $verifyFailed = false;
         try {
             $mock->verifyExpectations();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $verifyFailed = true;
         }
         
@@ -99,8 +99,7 @@ class MockTestFixture extends \Enhance\TestFixture
         $verifyFailed = false;
         try {
             $mock->verifyExpectations();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $verifyFailed = true;
         }
         
@@ -118,8 +117,7 @@ class MockTestFixture extends \Enhance\TestFixture
         $verifyFailed = false;
         try {
             $mock->verifyExpectations();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $verifyFailed = true;
         }
         
@@ -135,8 +133,7 @@ class MockTestFixture extends \Enhance\TestFixture
         $verifyFailed = false;
         try {
             $mock->doSomething('hello', 3, 'world');
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $verifyFailed = true;
         }
         
@@ -152,8 +149,7 @@ class MockTestFixture extends \Enhance\TestFixture
 
         try {
             $mock->doSomething();
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $verifyFailed = true;
         }
 
@@ -184,7 +180,7 @@ class MockTestFixture extends \Enhance\TestFixture
         $mock->verifyExpectations();
     }
 
-    public function createMockWithMultipleExpectationsExpectVerify() 
+    public function createMockWithMultipleExpectationsExpectVerify()
     {
         /** @var IMockExample $mock */
         $mock = \Enhance\MockFactory::createMock('ExampleClass');
@@ -242,8 +238,7 @@ class MockTestFixture extends \Enhance\TestFixture
 
 interface IMockExample
 {
-    function doSomething();
-    function anotherMethod();
-    function callNotExpectedMethod();
+    public function doSomething();
+    public function anotherMethod();
+    public function callNotExpectedMethod();
 }
-?>

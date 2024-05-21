@@ -8,7 +8,6 @@ class StubThrowsClass
     
     public function doesNotThrow()
     {
-
     }
     
     public function doesThrowWithArgs($a, $b)
@@ -72,4 +71,3 @@ class AssertThrowsTestFixture extends \Enhance\TestFixture
         \Enhance\Assert::isTrue($verifyFailed);
     }
 }
-?>

@@ -11,4 +11,3 @@ class CreateOutputTemplateTestFixture extends \Enhance\TestFixture
         }
     }
 }
-?>
