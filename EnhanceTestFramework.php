@@ -63,7 +63,6 @@ class Core
 // Public API
 class TestFixture
 {
-
 }
 
 // Public API
@@ -116,7 +115,7 @@ class Assert
 
     private static function getEnhanceAssertionsInstance()
     {
-        if(self::$EnhanceAssertions === null) {
+        if (self::$EnhanceAssertions === null) {
             self::$EnhanceAssertions = new Assertions(Core::getLanguage());
         }
         return self::$EnhanceAssertions;
@@ -469,11 +468,12 @@ class TextSp
     public $CannotCallVerifyOnStub = 'No se puede llamar  VerifyExpectations en un stub';
     public $ReturnsOrThrowsNotBoth = 'Debe proporcionar un solo valor de retorno (1 returns() ó 1 throws())';
     public $ScenarioWithExpectMismatch = 'Escenario debe ser inicializado con el mismo número de llamadas "with" y "expect" ';
-    public $LineFile = 'Linha {0} no arquivo {1}';    
+    public $LineFile = 'Linha {0} no arquivo {1}';
     public $TypeOfVar=" Tipo: ";
 }
 
-class TextRo{
+class TextRo
+{
     public $FormatForTestRunTook = 'Testul a durat {0} secunde';
     public $FormatForExpectedButWas = 'Se aștepta {0} dar a returnat {1}';
     public $FormatForExpectedNotButWas = 'Nu se aștepta {0} dar a returnat {1}';
@@ -536,7 +536,7 @@ class EnhanceTestFramework
         $this->getTestFixturesByParent();
         $this->run();
 
-        if(PHP_SAPI === 'cli' && $output != TemplateType::Tap) {
+        if (PHP_SAPI === 'cli' && $output != TemplateType::Tap) {
             $output = TemplateType::Cli;
         }
 
@@ -559,7 +559,7 @@ class EnhanceTestFramework
     public function log($className, $methodName)
     {
         $index = $this->getMethodIndex($className, $methodName);
-        if (array_key_exists($index ,$this->MethodCalls)) {
+        if (array_key_exists($index, $this->MethodCalls)) {
             $this->MethodCalls[$index] = $this->MethodCalls[$index] + 1;
         }
     }
@@ -567,9 +567,9 @@ class EnhanceTestFramework
     public function registerForCodeCoverage($className)
     {
         $classMethods = get_class_methods($className);
-        foreach($classMethods as $methodName) {
+        foreach ($classMethods as $methodName) {
             $index = $this->getMethodIndex($className, $methodName);
-            if (!array_key_exists($index ,$this->MethodCalls)) {
+            if (!array_key_exists($index, $this->MethodCalls)) {
                 $this->MethodCalls[$index] = 0;
             }
         }
@@ -583,18 +583,18 @@ class EnhanceTestFramework
     private function getTestFixturesByParent()
     {
         $classes = get_declared_classes();
-        foreach($classes as $className) {
+        foreach ($classes as $className) {
             $this->addClassIfTest($className);
         }
     }
 
     private function addClassIfTest($className)
     {
-    	$reflectionClass = new \ReflectionClass($className);
+        $reflectionClass = new \ReflectionClass($className);
         if ($reflectionClass->isAbstract()) {
             return;
         }
-    	
+        
         $parentClassName = get_parent_class($className);
         if ($parentClassName === 'Enhance\TestFixture') {
             $instance = new $className();
@@ -611,7 +611,7 @@ class EnhanceTestFramework
     private function addFixture($class)
     {
         $classMethods = get_class_methods($class);
-        foreach($classMethods as $method) {
+        foreach ($classMethods as $method) {
             if (strtolower($method) !== 'setup' && strtolower($method) !== 'teardown') {
                 $reflection = new \ReflectionMethod($class, $method);
                 if ($reflection->isPublic()) {
@@ -630,10 +630,14 @@ class EnhanceTestFramework
     private function run()
     {
         $start = microtime(true);
-        foreach($this->Tests as /** @var Test $test */ $test) {
-			if(class_exists('\codespy\Analyzer')) \codespy\Analyzer::$currenttest =  $test->getTestName();
+        foreach ($this->Tests as /** @var Test $test */ $test) {
+            if (class_exists('\codespy\Analyzer')) {
+                \codespy\Analyzer::$currenttest =  $test->getTestName();
+            }
             $result = $test->run();
-			if(class_exists('\codespy\Analyzer')) \codespy\Analyzer::$currenttest =  '';
+            if (class_exists('\codespy\Analyzer')) {
+                \codespy\Analyzer::$currenttest =  '';
+            }
             if ($result) {
                 $message = $test->getTestName() . ' - ' . $this->Text->Passed;
                 $this->Results[] = new TestMessage($message, $test, true);
@@ -656,11 +660,11 @@ class FileSystem
         if ($handle = opendir($directory)) {
             while (false !== ($file = readdir($handle))) {
                 if ($file != '.' && $file != '..' && strpos($file, '.') !== 0) {
-                    if ($this->isFolderExcluded($file, $excludeRules)){
+                    if ($this->isFolderExcluded($file, $excludeRules)) {
                         continue;
                     }
 
-                    if(is_dir($directory . '/' . $file)) {
+                    if (is_dir($directory . '/' . $file)) {
                         if ($isRecursive) {
                             $dir2 = $directory . '/' . $file;
                             $files[] = $this->getFilesFromDirectory($dir2, $isRecursive, $excludeRules);
@@ -679,8 +683,8 @@ class FileSystem
     {
         $folder = substr($folder, strrpos($folder, '/'));
 
-        foreach ($excludeRules as $excluded){
-            if ($folder === $excluded){
+        foreach ($excludeRules as $excluded) {
+            if ($folder === $excluded) {
                 return true;
             }
         }
@@ -690,8 +694,8 @@ class FileSystem
     public function flattenArray($array)
     {
         $merged = array();
-        foreach($array as $a) {
-            if(is_array($a)) {
+        foreach ($array as $a) {
+            if (is_array($a)) {
                 $merged = array_merge($merged, $this->flattenArray($a));
             } else {
                 $merged[] = $a;
@@ -770,7 +774,8 @@ class Test
             if (method_exists($testClass, $this->SetUpMethod)) {
                 $testClass->{$this->SetUpMethod}();
             }
-        } catch (\Exception $e) { }
+        } catch (\Exception $e) {
+        }
 
         try {
             $testClass->{$this->TestMethod}();
@@ -786,7 +791,8 @@ class Test
             if (method_exists($testClass, $this->TearDownMethod)) {
                 $testClass->{$this->TearDownMethod}();
             }
-        } catch (\Exception $e) { }
+        } catch (\Exception $e) {
+        }
 
         return $result;
     }
@@ -863,7 +869,7 @@ class Mock
             if (!$expectation->verify()) {
                 $Arguments = '';
                 if (isset($expectation->MethodArguments)) {
-                    foreach($expectation->MethodArguments as $argument) {
+                    foreach ($expectation->MethodArguments as $argument) {
                         if (isset($Arguments[0])) {
                             $Arguments .= ', ';
                         }
@@ -923,12 +929,14 @@ class Mock
             }
         }
 
-        if ($this->IsMock)  {
+        if ($this->IsMock) {
             throw new \Exception(
                 $this->Text->ExpectationFailed . ' ' .
                     $this->ClassName . '->' . $methodName . '(' . implode(', ', $args) . ') ' .
                     $this->Text->Expected . ' #0 ' .
-                    $this->Text->Called . ' #1', 0);
+                    $this->Text->Called . ' #1',
+                0
+            );
         }
         return null;
     }
@@ -1012,7 +1020,7 @@ class Scenario
 
         $exceptionText = '';
 
-        while(count($this->Inputs) > 0) {
+        while (count($this->Inputs) > 0) {
             $input = array_shift($this->Inputs);
             $expected = array_shift($this->Expectations);
             $expected = $expected[0];
@@ -1028,7 +1036,7 @@ class Scenario
             }
         }
 
-        if ($exceptionText !== ''){
+        if ($exceptionText !== '') {
             throw new TestException($exceptionText);
         }
     }
@@ -1153,7 +1161,7 @@ class Assertions
             if ((string)$expected === (string)$actual) {
                 throw new TestException(format_message(
                     $this->getDescription($expected),
-                    $this->getDescription($actual), 
+                    $this->getDescription($actual),
                     $this->Text->FormatForExpectedNotButWas
                 ));
             }
@@ -1171,7 +1179,7 @@ class Assertions
         if ($actual !== true) {
             throw new TestException(format_message(
                 'true',
-                $this->getDescription($actual), 
+                $this->getDescription($actual),
                 $this->Text->FormatForExpectedButWas
             ));
         }
@@ -1217,7 +1225,7 @@ class Assertions
         if ($actual !== null) {
             throw new TestException(format_message(
                 'null',
-                $this->getDescription($actual), 
+                $this->getDescription($actual),
                 $this->Text->FormatForExpectedButWas
             ));
         }
@@ -1239,7 +1247,7 @@ class Assertions
         if (!is_array($actual)) {
             throw new TestException(format_message(
                 'null',
-                $this->getDescription($actual),                 
+                $this->getDescription($actual),
                 $this->Text->FormatForExpectedButWas
             ));
         }
@@ -1250,7 +1258,7 @@ class Assertions
         if (is_array($actual)) {
             throw new TestException(format_message(
                 'null',
-                $this->getDescription($actual), 
+                $this->getDescription($actual),
                 $this->Text->FormatForExpectedNotButWas
             ));
         }
@@ -1272,7 +1280,7 @@ class Assertions
         if (is_bool($actual)) {
             throw new TestException(format_message(
                 'null',
-                $this->getDescription($actual), 
+                $this->getDescription($actual),
                 $this->Text->FormatForExpectedNotButWas
             ));
         }
@@ -1327,7 +1335,7 @@ class Assertions
         if (!is_numeric($actual)) {
             throw new TestException(format_message(
                 'null',
-                $this->getDescription($actual),                
+                $this->getDescription($actual),
                 $this->Text->FormatForExpectedButWas
             ));
         }
@@ -1349,7 +1357,7 @@ class Assertions
         if (!is_object($actual)) {
             throw new TestException(format_message(
                 'null',
-                $this->getDescription($actual),                
+                $this->getDescription($actual),
                 $this->Text->FormatForExpectedButWas
             ));
         }
@@ -1371,7 +1379,7 @@ class Assertions
         if (!is_resource($actual)) {
             throw new TestException(format_message(
                 'null',
-                $this->getDescription($actual),                
+                $this->getDescription($actual),
                 $this->Text->FormatForExpectedButWas
             ));
         }
@@ -1404,7 +1412,7 @@ class Assertions
         if (is_scalar($actual)) {
             throw new TestException(format_message(
                 'null',
-                $this->getDescription($actual), 
+                $this->getDescription($actual),
                 $this->Text->FormatForExpectedNotButWas
             ));
         }
@@ -1415,7 +1423,7 @@ class Assertions
         if (!is_string($actual)) {
             throw new TestException(format_message(
                 'null',
-                $this->getDescription($actual), 
+                $this->getDescription($actual),
                 $this->Text->FormatForExpectedButWas
             ));
         }
@@ -1426,7 +1434,7 @@ class Assertions
         if (is_string($actual)) {
             throw new TestException(format_message(
                 'null',
-                $this->getDescription($actual), 
+                $this->getDescription($actual),
                 $this->Text->FormatForExpectedNotButWas
             ));
         }
@@ -1448,7 +1456,7 @@ class Assertions
         if ($expected !== $actualType) {
             throw new TestException(format_message(
                 $expected,
-                $actualType, 
+                $actualType,
                 $this->Text->FormatForExpectedButWas
             ));
         };
@@ -1460,7 +1468,7 @@ class Assertions
         if ($expected === $actualType) {
             throw new TestException(format_message(
                 $expected,
-                $actualType, 
+                $actualType,
                 $this->Text->FormatForExpectedNotButWas
             ));
         };
@@ -1488,12 +1496,12 @@ class Assertions
 
     private function getDescription($mixed)
     {
-        if (is_object($mixed)){
+        if (is_object($mixed)) {
             return get_class($mixed);
-        } else if (is_bool($mixed)){
+        } elseif (is_bool($mixed)) {
             return $mixed ? 'true' : 'false';
-        } else if (is_array($mixed)) {
-              return implode(', ', $mixed);
+        } elseif (is_array($mixed)) {
+            return implode(', ', $mixed);
         } else {
             return (string) $mixed;
         }
@@ -1738,7 +1746,7 @@ class XmlTemplate implements iOutputTemplate
     private function getNode($tabs, $nodeName, $nodeValue)
     {
         $node = '';
-        for ($i = 0; $i < $tabs; ++$i){
+        for ($i = 0; $i < $tabs; ++$i) {
             $node .= $this->Tab;
         }
         $node .= '<' . $nodeName . '>' . $nodeValue . '</' . $nodeName . '>' . $this->CR;
@@ -1855,7 +1863,6 @@ class TapTemplate implements iOutputTemplate
 
         return $message;
     }
-
 }
 
 class TemplateFactory
@@ -1912,5 +1919,3 @@ function format_message($firstPlaceholder, $secondPlaceholder, $text)
         '{1}' => $secondPlaceholder
     ]);
 }
-
-?>
