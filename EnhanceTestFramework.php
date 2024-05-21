@@ -638,7 +638,7 @@ class EnhanceTestFramework
                 $message = $test->getTestName() . ' - ' . $this->Text->Passed;
                 $this->Results[] = new TestMessage($message, $test, true);
             } else {
-                $message = '['. str_replace('{0}', $test->getLine(), str_replace('{1}', $test->getFile(), $this->Text->LineFile)) . '] ' .
+                $message = '['. format_message($test->getLine(), $test->getFile(), $this->Text->LineFile) . '] ' .
                     $test->getTestName() . ' - ' .
                     $this->Text->Failed . ' - ' . $test->getMessage();
                 $this->Errors[] = new TestMessage($message, $test, false);
@@ -873,9 +873,10 @@ class Mock
 
                 throw new TestException(
                     $this->Text->ExpectationFailed . ' ' .
-                        $this->ClassName . '->' . $expectation->MethodName . '(' . $Arguments . ') ' .
-                        $this->Text->Expected . ' #' . $expectation->ExpectedCalls . ' ' .
-                        $this->Text->Called . ' #' . $expectation->ActualCalls, 0);
+                    $this->ClassName . '->' . $expectation->MethodName . '(' . $Arguments . ') ' .
+                    $this->Text->Expected . ' #' . $expectation->ExpectedCalls . ' ' .
+                    $this->Text->Called . ' #' . $expectation->ActualCalls
+                );
             }
         }
     }
@@ -1020,15 +1021,15 @@ class Scenario
 
             if (is_float($expected)) {
                 if ((string)$expected !== (string)$actual) {
-                    $exceptionText .= str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas));
+                    $exceptionText .= format_message($expected, $actual, $this->Text->FormatForExpectedButWas);
                 }
             } elseif ($expected != $actual) {
-                $exceptionText .= str_replace('{0}', $expected, str_replace('{1}', $actual, $this->Text->FormatForExpectedButWas));
+                $exceptionText .= format_message($expected, $actual, $this->Text->FormatForExpectedButWas);
             }
         }
 
         if ($exceptionText !== ''){
-            throw new TestException($exceptionText, 0);
+            throw new TestException($exceptionText);
         }
     }
 }
@@ -1131,14 +1132,18 @@ class Assertions
     {
         if (is_float($expected)) {
             if ((string)$expected !== (string)$actual) {
-                throw new TestException(
-                    str_replace('{0}', $this->getDescription($expected),
-                        str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+                throw new TestException(format_message(
+                    $this->getDescription($expected),
+                    $this->getDescription($actual),
+                    $this->Text->FormatForExpectedButWas
+                ));
             }
         } elseif ($expected !== $actual) {
-            throw new TestException(
-                str_replace('{0}', $this->getDescription($expected),
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                $this->getDescription($expected),
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
@@ -1146,32 +1151,40 @@ class Assertions
     {
         if (is_float($expected)) {
             if ((string)$expected === (string)$actual) {
-                throw new TestException(
-                    str_replace('{0}', $this->getDescription($expected),
-                        str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+                throw new TestException(format_message(
+                    $this->getDescription($expected),
+                    $this->getDescription($actual), 
+                    $this->Text->FormatForExpectedNotButWas
+                ));
             }
         } elseif ($expected === $actual) {
-            throw new TestException(
-                str_replace('{0}', $this->getDescription($expected),
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                $this->getDescription($expected),
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedNotButWas
+            ));
         }
     }
 
     public function isTrue($actual)
     {
         if ($actual !== true) {
-            throw new TestException(
-                str_replace('{0}', 'true',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'true',
+                $this->getDescription($actual), 
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
     public function isFalse($actual)
     {
         if ($actual !== false) {
-            throw new TestException(
-                str_replace('{0}', 'false',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'false',
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
@@ -1179,9 +1192,11 @@ class Assertions
     {
         $result = strpos($actual, $expected);
         if ($result === false) {
-            throw new TestException(
-                str_replace('{0}', $this->getDescription($expected),
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedContainsButWas)), 0);
+            throw new TestException(format_message(
+                $this->getDescription($expected),
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedContainsButWas
+            ));
         }
     }
 
@@ -1189,209 +1204,253 @@ class Assertions
     {
         $result = strpos($actual, $expected);
         if ($result !== false) {
-            throw new TestException(
-                str_replace('{0}', $this->getDescription($expected),
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotContainsButWas)), 0);
+            throw new TestException(format_message(
+                $this->getDescription($expected),
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedNotContainsButWas
+            ));
         }
     }
 
     public function isNull($actual)
     {
         if ($actual !== null) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual), 
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
     public function isNotNull($actual)
     {
         if ($actual === null) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedNotButWas
+            ));
         }
     }
 
     public function isArray($actual)
     {
         if (!is_array($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),                 
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
     public function isNotArray($actual)
     {
         if (is_array($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual), 
+                $this->Text->FormatForExpectedNotButWas
+            ));
         }
     }
 
     public function isBool($actual)
     {
         if (!is_bool($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
     public function isNotBool($actual)
     {
         if (is_bool($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual), 
+                $this->Text->FormatForExpectedNotButWas
+            ));
         }
     }
 
     public function isFloat($actual)
     {
         if (!is_float($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
     public function isNotFloat($actual)
     {
         if (is_float($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedNotButWas
+            ));
         }
     }
 
     public function isInt($actual)
     {
         if (!is_int($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
     public function isNotInt($actual)
     {
         if (is_int($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedNotButWas
+            ));
         }
     }
 
     public function isNumeric($actual)
     {
         if (!is_numeric($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),                
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
     public function isNotNumeric($actual)
     {
         if (is_numeric($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedNotButWas
+            ));
         }
     }
 
     public function isObject($actual)
     {
         if (!is_object($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),                
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
     public function isNotObject($actual)
     {
         if (is_object($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedNotButWas
+            ));
         }
     }
 
     public function isResource($actual)
     {
         if (!is_resource($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),                
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
     public function isNotResource($actual)
     {
         if (is_resource($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedNotButWas
+            ));
         }
     }
 
     public function isScalar($actual)
     {
         if (!is_scalar($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual),
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
     public function isNotScalar($actual)
     {
         if (is_scalar($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual), 
+                $this->Text->FormatForExpectedNotButWas
+            ));
         }
     }
 
     public function isString($actual)
     {
         if (!is_string($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual), 
+                $this->Text->FormatForExpectedButWas
+            ));
         }
     }
 
     public function isNotString($actual)
     {
         if (is_string($actual)) {
-            throw new TestException(
-                str_replace('{0}', 'null',
-                    str_replace('{1}', $this->getDescription($actual), $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                'null',
+                $this->getDescription($actual), 
+                $this->Text->FormatForExpectedNotButWas
+            ));
         }
     }
 
     public function fail()
     {
-        throw new TestException($this->Text->Failed, 0);
+        throw new TestException($this->Text->Failed);
     }
 
     public function inconclusive()
     {
-        throw new TestException($this->Text->InconclusiveOrNotImplemented, 0);
+        throw new TestException($this->Text->InconclusiveOrNotImplemented);
     }
 
     public function isInstanceOfType($expected, $actual)
     {
         $actualType = get_class($actual);
         if ($expected !== $actualType) {
-            throw new TestException(
-                str_replace('{0}', $expected,
-                    str_replace('{1}', $actualType, $this->Text->FormatForExpectedButWas)), 0);
+            throw new TestException(format_message(
+                $expected,
+                $actualType, 
+                $this->Text->FormatForExpectedButWas
+            ));
         };
     }
 
@@ -1399,9 +1458,11 @@ class Assertions
     {
         $actualType = get_class($actual);
         if ($expected === $actualType) {
-            throw new TestException(
-                str_replace('{0}', $expected,
-                    str_replace('{1}', $actualType, $this->Text->FormatForExpectedNotButWas)), 0);
+            throw new TestException(format_message(
+                $expected,
+                $actualType, 
+                $this->Text->FormatForExpectedNotButWas
+            ));
         };
     }
 
@@ -1421,7 +1482,7 @@ class Assertions
         }
 
         if (!$exception) {
-            throw new TestException($this->Text->ExpectedExceptionNotThrown, 0);
+            throw new TestException($this->Text->ExpectedExceptionNotThrown);
         }
     }
 
@@ -1843,4 +1904,13 @@ class Localisation
 {
     public $Language = Language::English;
 }
+
+function format_message($firstPlaceholder, $secondPlaceholder, $text)
+{
+    return strtr($text, [
+        '{0}' => $firstPlaceholder,
+        '{1}' => $secondPlaceholder
+    ]);
+}
+
 ?>
