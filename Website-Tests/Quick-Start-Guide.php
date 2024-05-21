@@ -1,6 +1,6 @@
 <?php
 // Include the test framework
-include_once('EnhanceTestFramework.php');
+include_once('../EnhanceTestFramework.php');
 
 // Include your classes and test fixtures - they can be in separate files, just use include_once() statements for them!
 class ExampleClass
