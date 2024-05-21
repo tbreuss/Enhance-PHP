@@ -1,1 +1,5 @@
 .idea/
+.php-cs-fixer.cache
+examples/
+composer.lock
+vendor/

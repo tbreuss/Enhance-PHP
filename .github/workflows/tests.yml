@@ -18,3 +18,18 @@ jobs:
 
       - name: Run Self-Test
         run: cd Self-Test && php index.php
+
+      - name: Run First-Test Example
+        run: cd First-Test && php index.php
+
+      - name: Run Kata Example
+        run: cd Kata && php index.php
+
+      - name: Run tempo Example
+        run: cd tempo && php index.php
+
+      - name: Run Test-Driven Example
+        run: cd Test-Driven && php index.php
+
+      - name: Run Xml-Output Example
+        run: cd Xml-Output && php index.php

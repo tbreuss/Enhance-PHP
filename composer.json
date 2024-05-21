@@ -9,5 +9,12 @@
         "files": [
             "EnhanceTestFramework.php"
         ]
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.57"
+    },
+    "scripts": {
+        "check-coding-style": "php-cs-fixer fix EnhanceTestFramework.php --dry-run --diff --verbose --show-progress=dots --rules=@PSR12",
+        "fix-coding-style": "php-cs-fixer fix EnhanceTestFramework.php --verbose --show-progress=dots --rules=@PSR12"
     }
 }
